@@ -1,12 +1,14 @@
-package com.example.exchangerates;
+package com.example.exchangerates.controller;
 
+import com.example.exchangerates.dto.ExchangeRateResponse;
+import com.example.exchangerates.service.ExchangeRateService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @RestController
+@RequestMapping("/exchange-rates")
 public class ExchangeRateController {
     private final ExchangeRateService exchangeRateService;
 
@@ -14,15 +16,13 @@ public class ExchangeRateController {
         this.exchangeRateService = exchangeRateService;
     }
 
-    @GetMapping("/exchange-rates/{baseCur}")
+    @GetMapping("/{baseCur}")
     public ExchangeRateResponse getExchangeRates(
             @PathVariable String baseCur,
             @RequestParam String symbols) {
 
         List<String> symbolList = Arrays.asList(symbols.toUpperCase().split(","));
-        Map<String, Double> rates = exchangeRateService.getExchangeRates(baseCur, symbolList);
-
-        return new ExchangeRateResponse(baseCur.toUpperCase(), rates);
+        return exchangeRateService.getExchangeRates(baseCur.toUpperCase(), symbolList);
     }
 
 }
