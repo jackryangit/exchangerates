@@ -11,10 +11,11 @@ import java.util.Map;
 public class FrankfurterClient {
     private static final String API_NAME = "frankfurter";
     private static final String API_URL = "https://api.frankfurter.app/latest?base=";
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final MetricsService metricsService;
 
     public FrankfurterClient(MetricsService metricsService) {
+        this.restTemplate = new RestTemplate();
         this.metricsService = metricsService;
     }
 

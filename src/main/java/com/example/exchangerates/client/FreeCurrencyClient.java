@@ -11,11 +11,12 @@ import java.util.Map;
 public class FreeCurrencyClient {
     private static final String API_NAME = "freeCurrencyApi";
     private static final String API_URL = "https://api.freecurrencyapi.com/v1/latest?apikey=API_KEY&base_currency=";
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final MetricsService metricsService;
 
-    public FreeCurrencyClient(MetricsService metricsService) {
+    public FreeCurrencyClient(RestTemplate restTemplate, MetricsService metricsService) {
         this.metricsService = metricsService;
+        this.restTemplate = restTemplate;
     }
 
     public Map<String, Double> getExchangeRates(String baseCurrency) {
