@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/exchange-rates")
+@RequestMapping("/exchangeRates")
 public class ExchangeRateController {
     private final ExchangeRateService exchangeRateService;
 

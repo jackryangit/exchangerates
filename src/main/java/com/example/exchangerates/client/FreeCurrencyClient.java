@@ -13,7 +13,7 @@ public class FreeCurrencyClient {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public Map<String, Double> getExchangeRates(String baseCurrency) {
-        String url = API_URL.replace("YOUR_API_KEY", "fca_live_...") + baseCurrency;
+        String url = API_URL.replace("API_KEY", "fca_live_...") + baseCurrency;
         FreeCurrencyResponse response = restTemplate.getForObject(url, FreeCurrencyResponse.class);
         if (response != null && response.getData() != null) {
             return response.getData();

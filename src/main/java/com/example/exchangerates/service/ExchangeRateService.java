@@ -1,13 +1,10 @@
 package com.example.exchangerates.service;
 
-import com.example.exchangerates.client.FrankfurterClient;
-import com.example.exchangerates.client.FreeCurrencyClient;
 import com.example.exchangerates.dto.ExchangeRateResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,19 +14,17 @@ import java.util.stream.Stream;
 public class ExchangeRateService {
     private static final Logger logger = LoggerFactory.getLogger(ExchangeRateService.class);
 
-    private final FrankfurterClient frankfurterClient;
-    private final FreeCurrencyClient freeCurrencyClient;
+    private final ExchangeRateFetcher exchangeRateFetcher;
 
-    public ExchangeRateService(FrankfurterClient frankfurterClient, FreeCurrencyClient freeCurrencyClient) {
-        this.frankfurterClient = frankfurterClient;
-        this.freeCurrencyClient = freeCurrencyClient;
+    public ExchangeRateService(ExchangeRateFetcher exchangeRateFetcher) {
+        this.exchangeRateFetcher = exchangeRateFetcher;
     }
 
     public ExchangeRateResponse getExchangeRates(String baseCurrency, List<String> symbols) {
         logger.info("Fetching rates for base {} and symbols: {}", baseCurrency, symbols);
         // Fetch rates from both sources
-        Map<String, Double> frankfurterRates = fetchFrankfurterRates(baseCurrency);
-        Map<String, Double> freeApiRates = fetchFreeCurrencyApiRates(baseCurrency);
+        Map<String, Double> frankfurterRates = exchangeRateFetcher.fetchFrankfurterRates(baseCurrency);
+        Map<String, Double> freeApiRates = exchangeRateFetcher.fetchFreeApiRates(baseCurrency);
 
         Map<String, Double> averagedRates = averageRates(frankfurterRates, freeApiRates, symbols);
 
@@ -51,24 +46,6 @@ public class ExchangeRateService {
                             return values.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
                         }
                 ));
-    }
-
-    private Map<String, Double> fetchFrankfurterRates(String baseCurrency) {
-        try {
-            return frankfurterClient.getExchangeRates(baseCurrency);
-        } catch (Exception e) {
-            logger.error("Could not fetch rates from Frankfurter: {}", e.getMessage());
-            return Collections.emptyMap();
-        }
-    }
-
-    private Map<String, Double> fetchFreeCurrencyApiRates(String baseCurrency) {
-        try {
-            return freeCurrencyClient.getExchangeRates(baseCurrency);
-        } catch (Exception e) {
-            logger.error("Could not fetch rates from FreeCurrencyAPI: {}", e.getMessage());
-            return Collections.emptyMap();
-        }
     }
 
 
