@@ -18,7 +18,7 @@ public class ExchangeRateFetcher {
     private final FrankfurterClient frankfurterClient;
     private final FreeCurrencyClient freeCurrencyApiClient;
 
-    public ExchangeRateFetcher(FrankfurterClient frankfurterClient, FreeCurrencyClient freeCurrencyClient) {
+    public ExchangeRateFetcher(FrankfurterClient frankfurterClient, FreeCurrencyClient freeCurrencyClient, MetricsService metricsService) {
         this.frankfurterClient = frankfurterClient;
         this.freeCurrencyApiClient = freeCurrencyClient;
     }
